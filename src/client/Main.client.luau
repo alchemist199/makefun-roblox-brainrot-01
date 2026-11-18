@@ -1,81 +1,72 @@
--- Snacktopia client: builds the HUD and keeps it in step with the server.
--- All game numbers live on the server as player attributes; this script only
--- reads them and draws them, so the client can never lie about the score.
+-- Client entry: builds the HUD and keeps it in step with the server by reading
+-- the local player's attributes. It never trusts its own copy of the numbers.
 
 local Players = game:GetService("Players")
 
 local Hud = require(script.Parent.Hud)
 
 local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
-local hud = Hud.Build(playerGui)
-
-local toastUntil = 0
+local hud = Hud.Build(player:WaitForChild("PlayerGui"))
 
 local function refreshMoney()
 	local money = player:GetAttribute("Money") or 0
 	local income = player:GetAttribute("Income") or 0
-	hud.moneyLabel.Text = "$" .. tostring(money)
-	hud.incomeLabel.Text = "+$" .. tostring(income) .. " / second"
+	hud.MoneyLabel.Text = "$" .. tostring(money)
+	hud.IncomeLabel.Text = "+$" .. tostring(income) .. " / second"
 end
 
 local function refreshGoal()
 	local goal = player:GetAttribute("Goal") or "Fuse all 3 hybrids: 0/3"
+	local placed = player:GetAttribute("PlacedCount") or 0
+	hud.GoalLabel.Text = goal .. "   |   Base: " .. tostring(placed) .. "/6"
 	local carrying = player:GetAttribute("Carrying") or ""
-	local carriedCount = player:GetAttribute("CarriedCount") or 0
-	local placedCount = player:GetAttribute("PlacedCount") or 0
-	hud.goalLabel.Text = goal .. "   |   Base: " .. tostring(placedCount) .. "/6"
+	local carried = player:GetAttribute("CarriedCount") or 0
 	if carrying == "" then
-		hud.carryingLabel.Text = "Carrying: nothing yet"
+		hud.CarryingLabel.Text = "Carrying: nothing yet"
 	else
-		hud.carryingLabel.Text = "Carrying (" .. tostring(carriedCount) .. "/2): " .. carrying
+		hud.CarryingLabel.Text = string.format("Carrying (%d/2): %s", carried, carrying)
 	end
 end
 
 local function refreshWave()
 	local state = player:GetAttribute("WaveState") or "calm"
-	local timer = player:GetAttribute("WaveTimer") or 0
+	local timer = player:GetAttribute("WaveTimer") or 100
 	if state == "warning" then
-		hud.waveLabel.Text = "GOBLIN WAVE IN " .. tostring(timer) .. "s - RUN HOME!"
-		hud.waveLabel.TextColor3 = Color3.fromRGB(255, 120, 60)
-		hud.wavePanel.BackgroundColor3 = Color3.fromRGB(90, 40, 10)
+		hud.WaveLabel.Text = string.format("GOBLIN WAVE IN %ds - RUN HOME!", timer)
+		hud.WaveLabel.TextColor3 = Color3.fromRGB(255, 170, 40)
+		hud.WavePanel.BackgroundColor3 = Color3.fromRGB(90, 60, 20)
 	elseif state == "wave" then
-		hud.waveLabel.Text = "GOBLIN WAVE! Defend your base!"
-		hud.waveLabel.TextColor3 = Color3.fromRGB(255, 60, 60)
-		hud.wavePanel.BackgroundColor3 = Color3.fromRGB(90, 10, 10)
+		hud.WaveLabel.Text = "GOBLIN WAVE! Defend your base!"
+		hud.WaveLabel.TextColor3 = Color3.fromRGB(255, 60, 60)
+		hud.WavePanel.BackgroundColor3 = Color3.fromRGB(90, 20, 20)
 	else
-		hud.waveLabel.Text = "Next Goblin Wave: " .. tostring(timer) .. "s"
-		hud.waveLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-		hud.wavePanel.BackgroundColor3 = Color3.fromRGB(30, 50, 30)
+		hud.WaveLabel.Text = string.format("Next Goblin Wave: %ds", timer)
+		hud.WaveLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+		hud.WavePanel.BackgroundColor3 = Color3.fromRGB(25, 70, 40)
 	end
-end
-
-local function showToast()
-	local message = player:GetAttribute("Toast") or ""
-	if message == "" then
-		return
-	end
-	hud.toastLabel.Text = message
-	hud.toastLabel.Visible = true
-	toastUntil = tick() + 4
-	task.delay(4, function()
-		if tick() >= toastUntil then
-			hud.toastLabel.Visible = false
-		end
-	end)
 end
 
 local function refreshBase()
 	local color = player:GetAttribute("BaseColor") or "?"
-	hud.baseLabel.Text = "Your base: " .. color
+	hud.BaseLabel.Text = "Your base: " .. color
 end
 
-local function refreshAll()
-	refreshMoney()
-	refreshGoal()
-	refreshWave()
-	refreshBase()
+local lastToastId = 0
+local function showToast()
+	local toastId = player:GetAttribute("ToastId") or 0
+	if toastId == lastToastId then
+		return
+	end
+	lastToastId = toastId
+	local message = player:GetAttribute("Toast") or ""
+	hud.ToastLabel.Text = message
+	hud.ToastLabel.Visible = true
+	local shownId = toastId
+	task.delay(4, function()
+		if lastToastId == shownId then
+			hud.ToastLabel.Visible = false
+		end
+	end)
 end
 
 player:GetAttributeChangedSignal("Money"):Connect(refreshMoney)
@@ -89,4 +80,7 @@ player:GetAttributeChangedSignal("WaveTimer"):Connect(refreshWave)
 player:GetAttributeChangedSignal("BaseColor"):Connect(refreshBase)
 player:GetAttributeChangedSignal("ToastId"):Connect(showToast)
 
-refreshAll()
+refreshMoney()
+refreshGoal()
+refreshWave()
+refreshBase()
