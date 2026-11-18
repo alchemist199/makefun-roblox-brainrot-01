@@ -1,14 +1,11 @@
--- Snacktopia wild spawner: brainrots roam the Wild Meadow, each one a bright
--- bobbing creature with a buy prompt. Buying one is the first step of the
--- loop: catch it, carry it home, place it on your base.
+-- Wild brainrots in the Wild Meadow: they roam (well, bob), show a buy prompt,
+-- and get carried home. The meadow is kept topped up to its cap.
 
 local Catalog = require(script.Parent.Catalog)
 local PlayerData = require(script.Parent.PlayerData)
 
 local Spawner = {}
 
--- Meadow spawn points. The world in default.project.json puts the meadow
--- (flowers, pond, bright grass) around these coordinates.
 local SPAWN_POINTS = {
 	Vector3.new(-50, 2, 70),
 	Vector3.new(-20, 2, 90),
@@ -20,143 +17,134 @@ local SPAWN_POINTS = {
 	Vector3.new(50, 2, 125),
 }
 
-local wild = {} -- array of { def, part, baseY, phase, pointIndex }
+local wild = {}
 local freePoints = {}
 
-local function makeLabel(def)
+local function buildLabel(def)
 	local gui = Instance.new("BillboardGui")
-	gui.Name = "BrainrotLabel"
-	gui.Size = UDim2.fromOffset(160, 64)
-	gui.StudsOffset = Vector3.new(0, 3.5, 0)
+	gui.Size = UDim2.fromOffset(140, 40)
+	gui.StudsOffset = Vector3.new(0, 3, 0)
 	gui.AlwaysOnTop = true
 	local nameLabel = Instance.new("TextLabel")
-	nameLabel.Name = "Name"
-	nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
+	nameLabel.Size = UDim2.fromScale(1, 0.5)
 	nameLabel.BackgroundTransparency = 1
-	nameLabel.Text = def.name
+	nameLabel.Text = def.Name
 	nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	nameLabel.TextStrokeTransparency = 0
-	nameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 	nameLabel.TextScaled = true
-	nameLabel.Font = Enum.Font.SourceSansBold
+	nameLabel.Font = Enum.Font.GothamBold
+	nameLabel.TextStrokeTransparency = 0
 	nameLabel.Parent = gui
-	local priceLabel = Instance.new("TextLabel")
-	priceLabel.Name = "Price"
-	priceLabel.Position = UDim2.new(0, 0, 0.5, 0)
-	priceLabel.Size = UDim2.new(1, 0, 0.5, 0)
-	priceLabel.BackgroundTransparency = 1
-	priceLabel.Text = def.rarity .. "  $" .. tostring(def.price) .. "  |  $" .. tostring(def.rate) .. "/s"
-	priceLabel.TextColor3 = Color3.fromRGB(255, 230, 100)
-	priceLabel.TextStrokeTransparency = 0
-	priceLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-	priceLabel.TextScaled = true
-	priceLabel.Font = Enum.Font.SourceSansBold
-	priceLabel.Parent = gui
+	local infoLabel = Instance.new("TextLabel")
+	infoLabel.Position = UDim2.fromScale(0, 0.5)
+	infoLabel.Size = UDim2.fromScale(1, 0.5)
+	infoLabel.BackgroundTransparency = 1
+	infoLabel.Text = string.format("%s - $%d - $%d/s", def.Rarity, def.Price, def.Rate)
+	infoLabel.TextColor3 = Color3.fromRGB(255, 220, 60)
+	infoLabel.TextScaled = true
+	infoLabel.Font = Enum.Font.GothamBold
+	infoLabel.TextStrokeTransparency = 0
+	infoLabel.Parent = gui
 	return gui
 end
 
-local function makePrompt(def)
-	local prompt = Instance.new("ProximityPrompt")
-	prompt.ActionText = "Buy " .. def.name
-	prompt.ObjectText = def.rarity .. " - $" .. tostring(def.price)
-	prompt.HoldDuration = 0.5
-	prompt.MaxActivationDistance = 12
-	prompt.RequiresLineOfSight = false
-	return prompt
-end
-
--- Spawn one wild brainrot at a free point. Returns the wild record.
-local function spawnOne()
-	if #wild >= Catalog.MEADOW_CAP then
-		return nil
-	end
-	if #freePoints == 0 then
-		return nil
-	end
-	local pointIndex = table.remove(freePoints, 1)
-	local point = SPAWN_POINTS[pointIndex]
-	local def = Catalog.RandomCatchable()
-	local part = Instance.new("Part")
-	part.Name = "Wild_" .. def.id
-	part.Shape = Enum.PartType.Ball
-	part.Size = Vector3.new(4, 4, 4)
-	part.Color = def.color
-	part.Material = Enum.Material.SmoothPlastic
-	part.Anchored = true
-	part.CanCollide = false
-	part.CFrame = CFrame.new(point)
-	part.Parent = workspace
-	makeLabel(def).Parent = part
-	local prompt = makePrompt(def)
-	prompt.Parent = part
-	local record = { def = def, part = part, baseY = point.Y, phase = math.random() * 6, pointIndex = pointIndex }
-	prompt.Triggered:Connect(function(player)
-		Spawner.TryBuy(player, record)
-	end)
-	table.insert(wild, record)
-	return record
-end
-
--- A player triggered a wild brainrot's buy prompt.
-function Spawner.TryBuy(player, record)
-	if not record.part or not record.part.Parent then
+local function onBuy(player, record)
+	if not record.Part or not record.Part.Parent then
 		return
 	end
 	local state = PlayerData.Get(player)
 	if not state then
 		return
 	end
-	local def = record.def
-	if state.money < def.price then
-		PlayerData.Toast(state, "Not enough money! " .. def.name .. " costs $" .. tostring(def.price) .. ".")
+	local def = record.Def
+	if state.Money < def.Price then
+		PlayerData.Toast(state, string.format("That costs $%d!", def.Price))
 		return
 	end
-	if #state.carried >= Catalog.MAX_CARRY then
-		PlayerData.Toast(state, "Your hands are full! Place a brainrot on your base first (max " .. tostring(Catalog.MAX_CARRY) .. ").")
+	if #state.Carried >= Catalog.MAX_CARRY then
+		PlayerData.Toast(state, "Your hands are full! Place one first (max 2).")
 		return
 	end
-	state.money = state.money - def.price
-	PlayerData.TryCarry(state, def.id)
+	PlayerData.AddMoney(state, -def.Price)
+	PlayerData.TryCarry(state, def.Id)
 	PlayerData.Sync(state)
-	PlayerData.Toast(state, "You caught " .. def.name .. "! Carry it home and place it on your base.")
-	-- Remove this wild one and free its point for the next spawn.
-	for i, entry in ipairs(wild) do
-		if entry == record then
+	PlayerData.Toast(state, string.format("You caught %s! Carry it home and place it on your base.", def.Name))
+	for i, other in ipairs(wild) do
+		if other == record then
 			table.remove(wild, i)
 			break
 		end
 	end
-	table.insert(freePoints, record.pointIndex)
-	record.part:Destroy()
-	-- A new one wanders in after a short, slightly random pause, so the
-	-- meadow never refills on a metronome.
-	task.delay(2 + math.random() * 3, function()
-		spawnOne()
+	table.insert(freePoints, record.PointIndex)
+	record.Part:Destroy()
+	task.delay(math.random(2, 5), function()
+		Spawner.SpawnOne()
 	end)
 end
 
--- Keep the meadow full and make the wild brainrots bob and drift.
+function Spawner.SpawnOne()
+	if #wild >= Catalog.MEADOW_CAP then
+		return
+	end
+	if #freePoints == 0 then
+		return
+	end
+	local pointIndex = table.remove(freePoints, 1)
+	local def = Catalog.RandomCatchable()
+	local point = SPAWN_POINTS[pointIndex]
+	local ball = Instance.new("Part")
+	ball.Shape = Enum.PartType.Ball
+	ball.Size = Vector3.new(4, 4, 4)
+	ball.Color = def.Color
+	ball.Material = Enum.Material.SmoothPlastic
+	ball.Anchored = true
+	ball.CanCollide = false
+	ball.Position = point
+	ball.Name = def.Name
+	ball.Parent = workspace
+	buildLabel(def).Parent = ball
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.ActionText = "Buy " .. def.Name
+	prompt.ObjectText = string.format("%s - $%d", def.Rarity, def.Price)
+	prompt.HoldDuration = 0.5
+	prompt.MaxActivationDistance = 12
+	prompt.RequiresLineOfSight = false
+	prompt.Parent = ball
+	local record = {
+		Def = def,
+		Part = ball,
+		BaseY = point.Y,
+		Phase = math.random() * math.pi * 2,
+		PointIndex = pointIndex,
+	}
+	prompt.Triggered:Connect(function(player)
+		onBuy(player, record)
+	end)
+	table.insert(wild, record)
+end
+
 function Spawner.Start()
 	for i = 1, #SPAWN_POINTS do
 		table.insert(freePoints, i)
 	end
 	for _ = 1, Catalog.MEADOW_CAP do
-		spawnOne()
+		Spawner.SpawnOne()
 	end
 	task.spawn(function()
 		while true do
 			task.wait(0.15)
-			local t = tick()
-			for _, entry in ipairs(wild) do
-				if entry.part and entry.part.Parent then
-					local pos = entry.part.Position
-					local bob = math.sin(t * 2 + entry.phase) * 0.6
-					entry.part.CFrame = CFrame.new(pos.X, entry.baseY + 1 + bob, pos.Z)
+			local now = os.clock()
+			for _, record in ipairs(wild) do
+				if record.Part and record.Part.Parent then
+					local bob = math.sin(now * 2 + record.Phase) * 0.6
+					record.Part.Position = Vector3.new(
+						record.Part.Position.X,
+						record.BaseY + 1 + bob,
+						record.Part.Position.Z
+					)
 				end
 			end
-			-- Top the meadow back up if anything was bought.
-			while #wild < Catalog.MEADOW_CAP and #freePoints > 0 do
-				spawnOne()
+			if #wild < Catalog.MEADOW_CAP and #freePoints > 0 then
+				Spawner.SpawnOne()
 			end
 		end
 	end)

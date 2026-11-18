@@ -1,99 +1,85 @@
--- Snacktopia Fusion Kitchen: the game's one new mechanic. Carry two
--- brainrots to the cauldron and fuse them into a rarer hybrid. Fusing is how
--- you climb past the shop: hybrids never roam the meadow, and a fused
--- brainrot earns far more than either ingredient alone.
+-- The Fusion Kitchen: carry any two brainrots to the cauldron and fuse them
+-- into a Mythic hybrid that never roams the meadow.
 
 local Catalog = require(script.Parent.Catalog)
 local PlayerData = require(script.Parent.PlayerData)
 
 local Fusion = {}
 
--- Build the recipe sign that hangs over the cauldron, from the catalog, so
--- the recipes on the wall are always the recipes the code knows.
-local function makeSign(cauldron)
-	local gui = Instance.new("BillboardGui")
-	gui.Name = "FusionSign"
-	gui.Size = UDim2.fromOffset(340, 150)
-	gui.StudsOffset = Vector3.new(0, 7, 0)
-	gui.AlwaysOnTop = true
+local function buildSign(cauldron)
+	local board = Instance.new("BillboardGui")
+	board.Size = UDim2.fromOffset(340, 150)
+	board.StudsOffset = Vector3.new(0, 7, 0)
+	board.AlwaysOnTop = true
+	board.Parent = cauldron
 	local frame = Instance.new("Frame")
-	frame.Name = "Sign"
-	frame.Size = UDim2.new(1, 0, 1, 0)
-	frame.BackgroundColor3 = Color3.fromRGB(40, 30, 60)
-	frame.BackgroundTransparency = 0.15
-	frame.BorderSizePixel = 0
-	frame.Parent = gui
+	frame.Size = UDim2.fromScale(1, 1)
+	frame.BackgroundColor3 = Color3.fromRGB(30, 20, 50)
+	frame.BackgroundTransparency = 0.2
+	frame.Parent = board
 	local title = Instance.new("TextLabel")
-	title.Name = "Title"
-	title.Size = UDim2.new(1, 0, 0, 28)
+	title.Position = UDim2.fromOffset(0, 4)
+	title.Size = UDim2.new(1, 0, 0, 26)
 	title.BackgroundTransparency = 1
 	title.Text = "FUSION KITCHEN - fuse 2, get 1 hybrid!"
-	title.TextColor3 = Color3.fromRGB(255, 220, 90)
+	title.TextColor3 = Color3.fromRGB(255, 220, 60)
+	title.Font = Enum.Font.GothamBold
 	title.TextScaled = true
-	title.Font = Enum.Font.SourceSansBold
 	title.Parent = frame
-	local y = 30
-	for _, recipe in ipairs(Catalog.Fusions) do
+	for i, recipe in ipairs(Catalog.Recipes) do
 		local line = Instance.new("TextLabel")
-		line.Name = "Recipe"
-		line.Position = UDim2.new(0, 6, 0, y)
+		line.Position = UDim2.fromOffset(6, 30 + (i - 1) * 36)
 		line.Size = UDim2.new(1, -12, 0, 34)
 		line.BackgroundTransparency = 1
-		line.Text = recipe.label
+		line.Text = recipe.Label
 		line.TextColor3 = Color3.fromRGB(255, 255, 255)
+		line.Font = Enum.Font.Gotham
 		line.TextScaled = true
 		line.TextWrapped = true
-		line.Font = Enum.Font.SourceSans
 		line.Parent = frame
-		y = y + 36
 	end
-	gui.Parent = cauldron
 end
 
--- A player triggered the cauldron's fuse prompt.
 local function onFuse(player)
 	local state = PlayerData.Get(player)
 	if not state then
 		return
 	end
-	if #state.carried < 2 then
-		PlayerData.Toast(state, "Bring TWO brainrots to fuse! You are carrying " .. tostring(#state.carried) .. ".")
+	if #state.Carried < 2 then
+		PlayerData.Toast(state, string.format("You carry %d brainrot(s). You need 2 to fuse!", #state.Carried))
 		return
 	end
-	local idA = state.carried[1]
-	local idB = state.carried[2]
-	local recipe = Catalog.FindFusion(idA, idB)
+	local firstId = state.Carried[1]
+	local secondId = state.Carried[2]
+	local recipe = Catalog.FindFusion(firstId, secondId)
 	if not recipe then
-		local defA = Catalog.Get(idA)
-		local defB = Catalog.Get(idB)
-		local nameA = defA and defA.name or idA
-		local nameB = defB and defB.name or idB
-		PlayerData.Toast(state, nameA .. " + " .. nameB .. " do not fuse. Read the recipes on the wall!")
+		local firstDef = Catalog.GetById(firstId)
+		local secondDef = Catalog.GetById(secondId)
+		local firstName = firstDef and firstDef.Name or firstId
+		local secondName = secondDef and secondDef.Name or secondId
+		PlayerData.Toast(state, string.format("%s and %s do not fuse. Read the recipes on the wall!", firstName, secondName))
 		return
 	end
-	-- Take both ingredients, hand back the hybrid.
-	PlayerData.RemoveCarried(state, idA)
-	PlayerData.RemoveCarried(state, idB)
-	PlayerData.TryCarry(state, recipe.result)
-	state.hybrids = state.hybrids + 1
+	local hybrid = Catalog.GetById(recipe.Result)
+	PlayerData.RemoveCarried(state, firstId)
+	PlayerData.RemoveCarried(state, secondId)
+	PlayerData.TryCarry(state, recipe.Result)
+	state.Hybrids += 1
 	PlayerData.Sync(state)
-	local hybrid = Catalog.Get(recipe.result)
-	local hybridName = hybrid and hybrid.name or recipe.result
-	PlayerData.Toast(state, "FUSION! " .. hybridName .. " is yours - $" .. tostring(hybrid.rate) .. "/s. Place it on your base!")
-	if #state.placed >= Catalog.BASE_SLOTS then
-		PlayerData.Toast(state, "Your base is full! Place the hybrid after you fuse or sell room by fusing more.")
+	PlayerData.Toast(state, string.format("FUSION! %s is yours - $%d/s. Place it on your base!", hybrid.Name, hybrid.Rate))
+	if #state.Placed >= Catalog.BASE_SLOTS then
+		PlayerData.Toast(state, "Your base is full! Place the hybrid after fusing or selling room by fusing more.")
 	end
-	if state.hybrids >= #Catalog.Fusions then
-		PlayerData.Toast(state, "SNACKTOPIA MASTER! You fused all " .. tostring(#Catalog.Fusions) .. " hybrids!")
+	if state.Hybrids >= Catalog.HYBRID_COUNT then
+		PlayerData.Toast(state, string.format("SNACKTOPIA MASTER! You fused all %d hybrids!", Catalog.HYBRID_COUNT))
 	end
 end
 
 function Fusion.Start()
 	local kitchen = workspace:WaitForChild("FusionKitchen")
 	local cauldron = kitchen:WaitForChild("Cauldron")
-	makeSign(cauldron)
+	buildSign(cauldron)
 	local prompt = Instance.new("ProximityPrompt")
-	prompt.Name = "FusePrompt"
 	prompt.ActionText = "Fuse carried brainrots"
 	prompt.ObjectText = "Fusion Kitchen"
 	prompt.HoldDuration = 1

@@ -1,7 +1,8 @@
--- Snacktopia Crumb Goblin waves: the threat. Every so often a warning sounds,
--- then goblins sweep in from the forest. They hunt players who are carrying
--- brainrots, and they raid bases whose owner is away. Standing on your own
--- base scares them off, so a wave is a race home with your catch.
+-- Crumb Goblin waves: every ~100 seconds a wave sweeps in. Goblins steal
+-- carried brainrots on touch and raid bases whose owner is away; standing on
+-- your own base scares them off.
+
+local Players = game:GetService("Players")
 
 local Catalog = require(script.Parent.Catalog)
 local PlayerData = require(script.Parent.PlayerData)
@@ -9,263 +10,230 @@ local PlayerData = require(script.Parent.PlayerData)
 local Waves = {}
 
 local WARNING_TIME = 10
-local GOBLIN_SPEED = 14 -- studs per second
-local GOBLIN_REACH = 4 -- steals a carried brainrot this close to a player
-local BASE_RAID_RANGE = 8 -- steals from a base this close to its pad
-local BASE_SAFE_RANGE = 14 -- owner standing this close to their pad scares goblins off
+local GOBLIN_SPEED = 14
+local STEAL_RANGE = 4
+local RAID_RANGE = 8
+local SAFE_RANGE = 14
 
-local goblins = {} -- array of { part, target }
-local bases = {} -- array of base pad Parts, indexed by base index
-local waveActive = false
+local EDGE_POINTS = {
+	Vector3.new(-180, 2, 0),
+	Vector3.new(180, 2, 0),
+	Vector3.new(0, 2, -180),
+	Vector3.new(0, 2, 180),
+}
 
-local function makeGoblin(position)
-	local part = Instance.new("Part")
-	part.Name = "CrumbGoblin"
-	part.Shape = Enum.PartType.Ball
-	part.Size = Vector3.new(3, 3, 3)
-	part.Color = Color3.fromRGB(70, 30, 110)
-	part.Material = Enum.Material.SmoothPlastic
-	part.Anchored = true
-	part.CanCollide = false
-	part.CFrame = CFrame.new(position)
-	part.Parent = workspace
-	local gui = Instance.new("BillboardGui")
-	gui.Name = "GoblinLabel"
-	gui.Size = UDim2.fromOffset(120, 30)
-	gui.StudsOffset = Vector3.new(0, 2.5, 0)
-	gui.AlwaysOnTop = true
-	local label = Instance.new("TextLabel")
-	label.Size = UDim2.new(1, 0, 1, 0)
-	label.BackgroundTransparency = 1
-	label.Text = "Crumb Goblin!"
-	label.TextColor3 = Color3.fromRGB(255, 120, 120)
-	label.TextStrokeTransparency = 0
-	label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-	label.TextScaled = true
-	label.Font = Enum.Font.SourceSansBold
-	label.Parent = gui
-	gui.Parent = part
-	return part
+local goblins = {}
+
+local function setWaveAttributes(stateName, secondsLeft)
+	for _, player in ipairs(Players:GetPlayers()) do
+		player:SetAttribute("WaveState", stateName)
+		player:SetAttribute("WaveTimer", secondsLeft)
+	end
 end
 
--- The nearest player who is carrying a brainrot, or nil.
-local function nearestCarrier(fromPos)
-	local best = nil
-	local bestDist = nil
-	for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
-		local state = PlayerData.Get(player)
-		if state and #state.carried > 0 then
-			local character = player.Character
-			local root = character and character:FindFirstChild("HumanoidRootPart")
-			if root then
-				local dist = (root.Position - fromPos).Magnitude
-				if not bestDist or dist < bestDist then
-					best = player
-					bestDist = dist
-				end
-			end
+local function makeGoblin()
+	local edge = EDGE_POINTS[math.random(1, #EDGE_POINTS)]
+	local ball = Instance.new("Part")
+	ball.Shape = Enum.PartType.Ball
+	ball.Size = Vector3.new(3, 3, 3)
+	ball.Color = Color3.fromRGB(70, 30, 110)
+	ball.Material = Enum.Material.SmoothPlastic
+	ball.Anchored = true
+	ball.CanCollide = false
+	ball.Position = edge
+	ball.Name = "Crumb Goblin"
+	ball.Parent = workspace
+	local label = Instance.new("BillboardGui")
+	label.Size = UDim2.fromOffset(120, 30)
+	label.StudsOffset = Vector3.new(0, 2.5, 0)
+	label.AlwaysOnTop = true
+	label.Parent = ball
+	local text = Instance.new("TextLabel")
+	text.Size = UDim2.fromScale(1, 1)
+	text.BackgroundTransparency = 1
+	text.Text = "Crumb Goblin!"
+	text.TextColor3 = Color3.fromRGB(255, 60, 60)
+	text.Font = Enum.Font.GothamBold
+	text.TextScaled = true
+	text.TextStrokeTransparency = 0
+	text.Parent = label
+	local goblin = { Part = ball, TargetPad = nil }
+	table.insert(goblins, goblin)
+	return goblin
+end
+
+local function destroyGoblin(goblin)
+	for i, other in ipairs(goblins) do
+		if other == goblin then
+			table.remove(goblins, i)
+			break
 		end
 	end
-	return best
-end
-
--- The state that owns a base pad, or nil.
-local function ownerOfBase(baseIndex)
-	for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
-		local state = PlayerData.Get(player)
-		if state and state.baseIndex == baseIndex then
-			return state
-		end
+	if goblin.Part then
+		goblin.Part:Destroy()
 	end
-	return nil
 end
 
--- Is this player standing on their own base right now?
-local function isOwnerHome(state)
-	local character = state.player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
+local function ownerIsHome(state)
+	if not state or not state.BasePart then
+		return false
+	end
+	local character = state.Player.Character
+	if not character then
+		return false
+	end
+	local root = character:FindFirstChild("HumanoidRootPart")
 	if not root then
 		return false
 	end
-	local pad = bases[state.baseIndex]
-	if not pad then
-		return false
-	end
-	return (root.Position - pad.Position).Magnitude < BASE_SAFE_RANGE
+	return (root.Position - state.BasePart.Position).Magnitude <= SAFE_RANGE
 end
 
--- Steal the lowest-earning placed brainrot from a base, if it has any.
-local function raidBase(state)
-	if #state.placed == 0 then
-		return false
+local function raidBase(goblin, pad, pads)
+	local ownerState = nil
+	for _, player in ipairs(Players:GetPlayers()) do
+		local state = PlayerData.Get(player)
+		if state and state.BasePart == pad then
+			ownerState = state
+			break
+		end
+	end
+	if not ownerState then
+		destroyGoblin(goblin)
+		return
+	end
+	if ownerIsHome(ownerState) then
+		destroyGoblin(goblin)
+		return
+	end
+	if #ownerState.Placed == 0 then
+		destroyGoblin(goblin)
+		return
 	end
 	local worstIndex = 1
-	local worstRate = nil
-	for i, entry in ipairs(state.placed) do
-		local def = Catalog.Get(entry.id)
-		local rate = def and def.rate or 0
-		if not worstRate or rate < worstRate then
+	local worstRate = math.huge
+	for i, placed in ipairs(ownerState.Placed) do
+		local def = Catalog.GetById(placed.Id)
+		local rate = def and def.Rate or 0
+		if rate < worstRate then
 			worstRate = rate
 			worstIndex = i
 		end
 	end
-	local entry = state.placed[worstIndex]
-	local part = entry.part
-	if part and part.Parent then
-		part:Destroy()
+	local stolen = ownerState.Placed[worstIndex]
+	local stolenDef = Catalog.GetById(stolen.Id)
+	if stolen.Part then
+		stolen.Part:Destroy()
 	end
-	local stolenId = PlayerData.RemovePlaced(state, worstIndex)
-	local def = Catalog.Get(stolenId)
-	PlayerData.Sync(state)
-	if def then
-		PlayerData.Toast(state, "A Crumb Goblin stole your " .. def.name .. " from your base!")
+	PlayerData.RemovePlaced(ownerState, worstIndex)
+	PlayerData.Sync(ownerState)
+	if stolenDef then
+		PlayerData.Toast(ownerState, string.format("A goblin stole %s from your base!", stolenDef.Name))
 	end
-	return true
+	destroyGoblin(goblin)
 end
 
--- Move every goblin one step toward its target and resolve steals.
-local function stepGoblins(dt)
+local function nearestCarrier(goblin)
+	local bestPlayer = nil
+	local bestDistance = math.huge
+	for _, player in ipairs(Players:GetPlayers()) do
+		local state = PlayerData.Get(player)
+		if state and #state.Carried > 0 and player.Character then
+			local root = player.Character:FindFirstChild("HumanoidRootPart")
+			if root then
+				local distance = (root.Position - goblin.Part.Position).Magnitude
+				if distance < bestDistance then
+					bestDistance = distance
+					bestPlayer = player
+				end
+			end
+		end
+	end
+	return bestPlayer, bestDistance
+end
+
+local function stepGoblins(pads, dt)
 	for i = #goblins, 1, -1 do
 		local goblin = goblins[i]
-		local part = goblin.part
-		if not part or not part.Parent then
+		if not goblin.Part or not goblin.Part.Parent then
 			table.remove(goblins, i)
 		else
-			local target = nil
-			local carrier = nearestCarrier(part.Position)
+			local carrier, distance = nearestCarrier(goblin)
 			if carrier then
-				local character = carrier.Character
-				local root = character and character:FindFirstChild("HumanoidRootPart")
-				if root then
-					target = root.Position
-					if (root.Position - part.Position).Magnitude < GOBLIN_REACH then
-						local state = PlayerData.Get(carrier)
-						if state and #state.carried > 0 then
-							local stolenId = state.carried[1]
-							PlayerData.RemoveCarried(state, stolenId)
-							PlayerData.Sync(state)
-							local def = Catalog.Get(stolenId)
-							if def then
-								PlayerData.Toast(state, "A Crumb Goblin stole your carried " .. def.name .. "! Run home faster next time.")
-							end
-						end
-						part:Destroy()
-						table.remove(goblins, i)
-						target = nil
-					end
+				local root = carrier.Character:FindFirstChild("HumanoidRootPart")
+				local direction = (root.Position - goblin.Part.Position)
+				local length = direction.Magnitude
+				if length > 0 then
+					local step = direction.Unit * GOBLIN_SPEED * dt
+					local bob = math.sin(os.clock() * 6) * 0.3
+					goblin.Part.Position = goblin.Part.Position + Vector3.new(step.X, bob * dt, step.Z)
 				end
-			end
-			if target == nil and part.Parent then
-				-- No carrier to chase: raid a random base.
-				local baseIndex = math.random(#bases)
-				local pad = bases[baseIndex]
-				if pad then
-					target = pad.Position
-					if (pad.Position - part.Position).Magnitude < BASE_RAID_RANGE then
-						local owner = ownerOfBase(baseIndex)
-						if owner then
-							if isOwnerHome(owner) then
-								-- Owner is home: scared off, no steal.
-								part:Destroy()
-								table.remove(goblins, i)
-								target = nil
-							else
-								raidBase(owner)
-								part:Destroy()
-								table.remove(goblins, i)
-								target = nil
-							end
-						else
-							part:Destroy()
-							table.remove(goblins, i)
-							target = nil
+				if distance <= STEAL_RANGE then
+					local state = PlayerData.Get(carrier)
+					if state and #state.Carried > 0 then
+						local stolenId = state.Carried[1]
+						local stolenDef = Catalog.GetById(stolenId)
+						PlayerData.RemoveCarried(state, stolenId)
+						PlayerData.Sync(state)
+						if stolenDef then
+							PlayerData.Toast(state, string.format("A goblin stole your %s! Run home faster next time!", stolenDef.Name))
 						end
 					end
+					destroyGoblin(goblin)
 				end
-			end
-			if target ~= nil and part.Parent then
-				local pos = part.Position
-				local dir = target - pos
-				local dist = dir.Magnitude
-				if dist > 0.01 then
-					local step = math.min(dist, GOBLIN_SPEED * dt)
-					local next = pos + dir.Unit * step
-					part.CFrame = CFrame.new(next.X, 2 + math.sin(tick() * 6) * 0.3, next.Z)
+			else
+				if not goblin.TargetPad or not goblin.TargetPad.Parent then
+					goblin.TargetPad = pads[math.random(1, #pads)]
+				end
+				local pad = goblin.TargetPad
+				local toPad = pad.Position - goblin.Part.Position
+				local padDistance = toPad.Magnitude
+				if padDistance <= RAID_RANGE then
+					raidBase(goblin, pad, pads)
+				elseif padDistance > 0 then
+					local step = toPad.Unit * GOBLIN_SPEED * dt
+					local bob = math.sin(os.clock() * 6) * 0.3
+					goblin.Part.Position = goblin.Part.Position + Vector3.new(step.X, bob * dt, step.Z)
 				end
 			end
 		end
 	end
 end
 
-local function setWaveAttributes(stateName, timer)
-	for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
-		player:SetAttribute("WaveState", stateName)
-		player:SetAttribute("WaveTimer", timer)
-	end
-end
-
-local function spawnWave()
-	local edges = {
-		Vector3.new(-180, 2, 0),
-		Vector3.new(180, 2, 0),
-		Vector3.new(0, 2, -180),
-		Vector3.new(0, 2, 180),
-	}
-	for _ = 1, Catalog.WAVE_GOBLINS do
-		local edge = edges[math.random(#edges)]
-		local part = makeGoblin(edge)
-		table.insert(goblins, { part = part })
-	end
-end
-
-local function clearGoblins()
-	for _, goblin in ipairs(goblins) do
-		if goblin.part and goblin.part.Parent then
-			goblin.part:Destroy()
-		end
-	end
-	goblins = {}
-end
-
--- basePads: array of the four base pad Parts, indexed 1-4.
-function Waves.Start(basePads)
-	bases = basePads
+function Waves.Start(pads)
 	task.spawn(function()
 		while true do
-			-- Calm: count down to the next wave.
-			local waitLeft = Catalog.WAVE_INTERVAL
-			while waitLeft > 0 do
-				setWaveAttributes("calm", waitLeft)
+			for left = Catalog.WAVE_INTERVAL, 1, -1 do
+				setWaveAttributes("calm", left)
 				task.wait(1)
-				waitLeft = waitLeft - 1
 			end
-			-- Warning: 10 seconds to get home.
-			for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
-				local warnState = PlayerData.Get(player)
-				if warnState then
-					PlayerData.Toast(warnState, "Goblin Wave in " .. tostring(WARNING_TIME) .. " seconds! Run home with your catch!")
+			for _, player in ipairs(Players:GetPlayers()) do
+				local state = PlayerData.Get(player)
+				if state then
+					PlayerData.Toast(state, "A goblin wave comes in 10 seconds! Run home with your catch!")
 				end
 			end
 			for left = WARNING_TIME, 1, -1 do
 				setWaveAttributes("warning", left)
 				task.wait(1)
 			end
-			-- The wave itself.
-			waveActive = true
-			spawnWave()
-			local waveLeft = Catalog.WAVE_DURATION
-			local lastStep = tick()
-			while waveLeft > 0 do
-				setWaveAttributes("wave", waveLeft)
-				local now = tick()
-				stepGoblins(now - lastStep)
-				lastStep = now
-				task.wait(0.2)
-				waveLeft = waveLeft - 0.2
+			for _ = 1, Catalog.GOBLINS_PER_WAVE do
+				makeGoblin()
 			end
-			waveActive = false
-			clearGoblins()
-			setWaveAttributes("calm", Catalog.WAVE_INTERVAL)
+			local elapsed = 0
+			while elapsed < Catalog.WAVE_DURATION do
+				setWaveAttributes("wave", Catalog.WAVE_DURATION - math.floor(elapsed))
+				stepGoblins(pads, 0.2)
+				task.wait(0.2)
+				elapsed += 0.2
+			end
+			for i = #goblins, 1, -1 do
+				local goblin = goblins[i]
+				if goblin.Part then
+					goblin.Part:Destroy()
+				end
+				table.remove(goblins, i)
+			end
 		end
 	end)
 end

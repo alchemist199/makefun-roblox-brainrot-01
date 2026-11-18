@@ -1,93 +1,87 @@
--- Snacktopia catalog: every brainrot type, its rarity, its money rate, its
--- price, its colour, and the fusion recipes. The server owns this data; the
--- client only ever sees names and numbers through player attributes.
+-- Snacktopia catalog: tuning numbers, the brainrot ladder, and the fusion recipes.
+-- Every other server module reads its numbers from here, so a balance change
+-- only ever touches this one file.
 
 local Catalog = {}
 
--- Game tuning.
 Catalog.START_MONEY = 100
 Catalog.BASE_SLOTS = 6
 Catalog.MAX_CARRY = 2
-Catalog.WAVE_INTERVAL = 100 -- seconds between Crumb Goblin waves
-Catalog.WAVE_DURATION = 30 -- seconds a wave lasts
-Catalog.WAVE_GOBLINS = 4
-Catalog.MEADOW_CAP = 8 -- wild brainrots alive at once
+Catalog.WAVE_INTERVAL = 100
+Catalog.WAVE_DURATION = 30
+Catalog.GOBLINS_PER_WAVE = 4
+Catalog.MEADOW_CAP = 8
 
--- Every brainrot in the game. catchable ones roam the Wild Meadow; hybrids
--- (rarity Mythic) only ever come out of the Fusion Kitchen.
+-- id, name, rarity, dollars per second, buy price, spawn weight, catchable, colour
 Catalog.Brainrots = {
-	{ id = "soggy", name = "Soggy Cereal Knight", rarity = "Common", rate = 2, price = 50, weight = 30, catchable = true, color = Color3.fromRGB(255, 200, 90) },
-	{ id = "noodle", name = "Noodle Arms Ned", rarity = "Common", rate = 3, price = 80, weight = 26, catchable = true, color = Color3.fromRGB(255, 150, 80) },
-	{ id = "toaster", name = "DJ Toaster", rarity = "Uncommon", rate = 6, price = 150, weight = 16, catchable = true, color = Color3.fromRGB(120, 180, 255) },
-	{ id = "pickle", name = "Professor Pickle", rarity = "Uncommon", rate = 8, price = 220, weight = 12, catchable = true, color = Color3.fromRGB(120, 220, 90) },
-	{ id = "boba", name = "Baron Bubble Tea", rarity = "Rare", rate = 15, price = 400, weight = 7, catchable = true, color = Color3.fromRGB(220, 130, 220) },
-	{ id = "couch", name = "Queen Couch Potato", rarity = "Rare", rate = 20, price = 550, weight = 5, catchable = true, color = Color3.fromRGB(200, 90, 120) },
-	{ id = "leftovers", name = "Sir Lancelot Leftovers", rarity = "Epic", rate = 35, price = 900, weight = 2, catchable = true, color = Color3.fromRGB(255, 220, 60) },
-	{ id = "ketchup", name = "Captain Ketchup", rarity = "Epic", rate = 40, price = 1100, weight = 1, catchable = true, color = Color3.fromRGB(230, 50, 50) },
-	{ id = "grandnoodle", name = "The Grand Noodle", rarity = "Legendary", rate = 60, price = 1500, weight = 1, catchable = true, color = Color3.fromRGB(255, 240, 150) },
-	{ id = "soggybeats", name = "DJ Soggy Beats", rarity = "Mythic", rate = 50, price = 0, weight = 0, catchable = false, color = Color3.fromRGB(255, 170, 40) },
-	{ id = "bobapickle", name = "Boba Pickle Baron", rarity = "Mythic", rate = 90, price = 0, weight = 0, catchable = false, color = Color3.fromRGB(180, 255, 120) },
-	{ id = "couchnoodle", name = "Couch Noodle Supreme", rarity = "Mythic", rate = 75, price = 0, weight = 0, catchable = false, color = Color3.fromRGB(255, 120, 200) },
+	{ Id = "soggy", Name = "Soggy Cereal Knight", Rarity = "Common", Rate = 2, Price = 50, Weight = 30, Catchable = true, Color = Color3.fromRGB(255, 200, 90) },
+	{ Id = "noodle", Name = "Noodle Arms Ned", Rarity = "Common", Rate = 3, Price = 80, Weight = 26, Catchable = true, Color = Color3.fromRGB(255, 150, 80) },
+	{ Id = "toaster", Name = "DJ Toaster", Rarity = "Uncommon", Rate = 6, Price = 150, Weight = 16, Catchable = true, Color = Color3.fromRGB(120, 180, 255) },
+	{ Id = "pickle", Name = "Professor Pickle", Rarity = "Uncommon", Rate = 8, Price = 220, Weight = 12, Catchable = true, Color = Color3.fromRGB(120, 220, 90) },
+	{ Id = "boba", Name = "Baron Bubble Tea", Rarity = "Rare", Rate = 15, Price = 400, Weight = 7, Catchable = true, Color = Color3.fromRGB(220, 130, 220) },
+	{ Id = "couch", Name = "Queen Couch Potato", Rarity = "Rare", Rate = 20, Price = 550, Weight = 5, Catchable = true, Color = Color3.fromRGB(200, 90, 120) },
+	{ Id = "leftovers", Name = "Sir Lancelot Leftovers", Rarity = "Epic", Rate = 35, Price = 900, Weight = 2, Catchable = true, Color = Color3.fromRGB(255, 220, 60) },
+	{ Id = "ketchup", Name = "Captain Ketchup", Rarity = "Epic", Rate = 40, Price = 1100, Weight = 1, Catchable = true, Color = Color3.fromRGB(230, 50, 50) },
+	{ Id = "grandnoodle", Name = "The Grand Noodle", Rarity = "Legendary", Rate = 60, Price = 1500, Weight = 1, Catchable = true, Color = Color3.fromRGB(255, 240, 150) },
+	{ Id = "soggybeats", Name = "DJ Soggy Beats", Rarity = "Mythic", Rate = 50, Price = 0, Weight = 0, Catchable = false, Color = Color3.fromRGB(255, 170, 40) },
+	{ Id = "bobapickle", Name = "Boba Pickle Baron", Rarity = "Mythic", Rate = 90, Price = 0, Weight = 0, Catchable = false, Color = Color3.fromRGB(180, 255, 120) },
+	{ Id = "couchnoodle", Name = "Couch Noodle Supreme", Rarity = "Mythic", Rate = 75, Price = 0, Weight = 0, Catchable = false, Color = Color3.fromRGB(255, 120, 200) },
 }
 
--- Fusion recipes: two brainrots in, one hybrid out. Order does not matter.
--- This is the game's one new mechanic: fuse, do not just collect.
-Catalog.Fusions = {
-	{ a = "soggy", b = "toaster", result = "soggybeats", label = "Soggy Cereal Knight + DJ Toaster = DJ Soggy Beats ($50/s)" },
-	{ a = "pickle", b = "boba", result = "bobapickle", label = "Professor Pickle + Baron Bubble Tea = Boba Pickle Baron ($90/s)" },
-	{ a = "noodle", b = "couch", result = "couchnoodle", label = "Noodle Arms Ned + Queen Couch Potato = Couch Noodle Supreme ($75/s)" },
+-- Each recipe fuses two carried brainrots into one Mythic hybrid.
+Catalog.Recipes = {
+	{ A = "soggy", B = "toaster", Result = "soggybeats", Label = "Soggy Cereal Knight + DJ Toaster = DJ Soggy Beats ($50/s)" },
+	{ A = "pickle", B = "boba", Result = "bobapickle", Label = "Professor Pickle + Baron Bubble Tea = Boba Pickle Baron ($90/s)" },
+	{ A = "noodle", B = "couch", Result = "couchnoodle", Label = "Noodle Arms Ned + Queen Couch Potato = Couch Noodle Supreme ($75/s)" },
 }
 
-local ById = {}
-for _, def in ipairs(Catalog.Brainrots) do
-	ById[def.id] = def
+Catalog.HYBRID_COUNT = 3
+
+local byId = {}
+for _, entry in ipairs(Catalog.Brainrots) do
+	byId[entry.Id] = entry
 end
 
--- How many hybrids exist: the goal is to fuse all of them.
-Catalog.HYBRID_COUNT = #Catalog.Fusions
+function Catalog.GetById(id)
+	return byId[id]
+end
 
--- True when this brainrot id is a fusion-only hybrid (never roams the meadow).
 function Catalog.IsHybrid(id)
-	local def = ById[id]
-	return def ~= nil and not def.catchable
+	local entry = byId[id]
+	return entry ~= nil and not entry.Catchable
 end
 
-function Catalog.Get(id)
-	return ById[id]
-end
-
--- Find the fusion recipe for a pair of brainrot ids, either order.
-function Catalog.FindFusion(idA, idB)
-	for _, recipe in ipairs(Catalog.Fusions) do
-		if (recipe.a == idA and recipe.b == idB) or (recipe.a == idB and recipe.b == idA) then
+function Catalog.FindFusion(firstId, secondId)
+	for _, recipe in ipairs(Catalog.Recipes) do
+		local forward = recipe.A == firstId and recipe.B == secondId
+		local backward = recipe.A == secondId and recipe.B == firstId
+		if forward or backward then
 			return recipe
 		end
 	end
 	return nil
 end
 
--- Pick a random catchable brainrot, weighted so commons show up most.
 function Catalog.RandomCatchable()
 	local total = 0
-	for _, def in ipairs(Catalog.Brainrots) do
-		if def.catchable then
-			total = total + def.weight
+	for _, entry in ipairs(Catalog.Brainrots) do
+		if entry.Catchable then
+			total += entry.Weight
 		end
 	end
-	local roll = math.random(total)
+	local roll = math.random(1, total)
 	local running = 0
-	for _, def in ipairs(Catalog.Brainrots) do
-		if def.catchable then
-			running = running + def.weight
-			if roll <= running then
-				return def
+	for _, entry in ipairs(Catalog.Brainrots) do
+		if entry.Catchable then
+			running += entry.Weight
+			if running >= roll then
+				return entry
 			end
 		end
 	end
 	return Catalog.Brainrots[1]
 end
 
--- Short rarity colour for HUD text.
 function Catalog.RarityColor(rarity)
 	if rarity == "Common" then
 		return Color3.fromRGB(220, 220, 220)
