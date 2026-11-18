@@ -1,8 +1,8 @@
 # Snacktopia: Fuse-a-Brainrot
 
-[![make.fun bounty](https://make.fun/badge/bounty/roblox-brainrot-01)](https://make.fun/bounty/roblox-brainrot-01)
-[![make.fun rank](https://make.fun/badge/rank/alchemist199/makefun-roblox-brainrot-01)](https://make.fun/bounty/roblox-brainrot-01)
-[![make.fun reward](https://make.fun/badge/reward/alchemist199/makefun-roblox-brainrot-01)](https://make.fun/bounty/roblox-brainrot-01)
+[![make.fun · roblox-brainrot-01](https://make.fun/badge/roblox-brainrot-01.svg)](https://make.fun/bounty/roblox-brainrot-01?utm_source=github&utm_medium=readme&utm_campaign=roblox-brainrot-01)
+[![rank](https://make.fun/badge/roblox-brainrot-01/alchemist199/makefun-roblox-brainrot-01/rank.svg)](https://make.fun/bounty/roblox-brainrot-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=roblox-brainrot-01)
+[![reward](https://make.fun/badge/roblox-brainrot-01/alchemist199/makefun-roblox-brainrot-01/reward.svg)](https://make.fun/bounty/roblox-brainrot-01?utm_source=github&utm_medium=readme&utm_campaign=roblox-brainrot-01)
 
 A 3D Roblox brainrot game for make.fun's roblox-brainrot-01 bounty. Catch absurd snack-creatures, carry them home, fuse them into rarer hybrids.
 
