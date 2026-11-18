@@ -1,53 +1,60 @@
-// Snacktopia: Fuse-a-Brainrot — a roblox-brainrot-01 entry (Node 22, standard
-// library only). The game is this directory's Rojo project ("snacktopia"): a
-// bright 3D snack island where you catch absurd snack-creatures in the Wild
-// Meadow, carry them home, place them on your base to earn money every
-// second, and fuse two of them in the Fusion Kitchen into a rarer hybrid,
-// while Crumb Goblin waves try to steal your catch. Build it with
-// `rojo build default.project.json --output game.rbxl`; this program hands it
-// in. It copies game.rbxl, src/, screenshots/ and PLAY.json from beside this
-// file to /output and writes /output/dossier.json, the summary the judge
-// reads, with the vendored make.fun library. Screenshots go in screenshots/
-// (the first by name is the cover, and one of them is the thumbnail you
-// upload for your game on Roblox); PLAY.json names your published place.
+// Snacktopia hand-in: copies the built place, the sources, the screenshots and
+// the play link into the output directory, then writes the dossier the judge
+// reads, using the vendored make.fun library. Node 22, standard library only.
 //
-// Every name under /output starts with a letter, a digit or _ and holds only letters, digits, . _ and -: the
-// grader fails an entry whose output holds any other, so a file such as .gitkeep or .DS_Store copied in fails it.
-// So src/ and screenshots/ are copied without any name that starts with a dot, at any depth.
-//
-// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
+// Run it outside the grader's container like this:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { copyFileSync, cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-roblox.ts';
 
-const here = fileURLToPath(new URL('.', import.meta.url));
-const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const repoRoot = fileURLToPath(new URL('.', import.meta.url));
+const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-/** cpSync's filter: leave out every file and directory whose name starts with a dot (.gitkeep, .DS_Store, .git). */
-const notDotted = (path: string): boolean => !basename(path).startsWith('.');
+// The grader refuses any output name that starts with a dot, so the tree
+// copies below leave dotted files and folders out at every depth.
+const keepVisible = (entryPath: string): boolean => !basename(entryPath).startsWith('.');
 
-// Fail loudly, with the fix, when the place was never built: the grader
-// would otherwise hand in a stale or missing game.rbxl.
-if (!existsSync(join(here, 'game.rbxl'))) {
-  throw new Error('game.rbxl is missing: build it first with `rojo build default.project.json --output game.rbxl`');
-}
-if (!existsSync(join(here, 'PLAY.json'))) {
-  throw new Error('PLAY.json is missing: it must name your published place (see the README).');
+function fail(message: string): never {
+  throw new Error(`Snacktopia hand-in failed: ${message}`);
 }
 
-copyFileSync(join(here, 'game.rbxl'), join(out, 'game.rbxl'));
-copyFileSync(join(here, 'PLAY.json'), join(out, 'PLAY.json'));
-cpSync(join(here, 'src'), join(out, 'src'), { recursive: true, filter: notDotted });
-mkdirSync(join(out, 'screenshots'), { recursive: true });
-if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true, filter: notDotted });
+const placeFile = join(repoRoot, 'game.rbxl');
+if (!existsSync(placeFile)) {
+  fail('game.rbxl is missing, build the place first with rojo build default.project.json --output game.rbxl');
+}
+if (statSync(placeFile).size === 0) {
+  fail('game.rbxl is empty (0 bytes), rebuild the place with rojo build default.project.json --output game.rbxl');
+}
+const playFile = join(repoRoot, 'PLAY.json');
+if (!existsSync(playFile)) {
+  fail('PLAY.json is missing, fill it in with the published place id and universe id');
+}
 
-// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the bytes; the others refuse an entry the
-// scorer would refuse (more than 4 screenshots or one over 256 KiB; a place of more than 500000 instances, whose
-// scripts' sources come to over 8 MiB or whose scripts' paths come to over 1048576 characters, in all).
+mkdirSync(outputDir, { recursive: true });
+copyFileSync(placeFile, join(outputDir, 'game.rbxl'));
+copyFileSync(playFile, join(outputDir, 'PLAY.json'));
+cpSync(join(repoRoot, 'src'), join(outputDir, 'src'), { recursive: true, filter: keepVisible });
+mkdirSync(join(outputDir, 'screenshots'), { recursive: true });
+const shotsDir = join(repoRoot, 'screenshots');
+if (!existsSync(shotsDir)) {
+  fail('screenshots directory is missing, add 1 to 4 screenshots before handing the game in');
+}
+const shotCount = readdirSync(shotsDir).filter((name) => !name.startsWith('.')).length;
+if (shotCount < 1 || shotCount > 4) {
+  fail(`expected 1 to 4 screenshots, found ${shotCount}`);
+}
+cpSync(shotsDir, join(outputDir, 'screenshots'), { recursive: true, filter: keepVisible });
+
 writeFileSync(
-  join(out, 'dossier.json'),
-  buildDossier(out, { text_max_bytes: 65536, screenshots: { max: 4, max_bytes: 262144 }, max_instances: 500000, scripts_max_source_bytes: 8388608, scripts_max_path_chars: 1048576 }),
+  join(outputDir, 'dossier.json'),
+  buildDossier(outputDir, {
+    text_max_bytes: 65536,
+    screenshots: { max: 4, max_bytes: 262144 },
+    max_instances: 500000,
+    scripts_max_source_bytes: 8388608,
+    scripts_max_path_chars: 1048576,
+  }),
 );

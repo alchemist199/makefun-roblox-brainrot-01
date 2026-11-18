@@ -1,1 +1,1455 @@
-{"name":"snacktopia","tree":{"$className":"DataModel","Lighting":{"$properties":{"Ambient":[0.7,0.7,0.7],"Brightness":3,"ClockTime":14,"FogEnd":1000,"GlobalShadows":true,"Outlines":false,"Technology":"Future"}},"Players":{"$properties":{"CharacterAutoLoads":true}},"ServerScriptService":{"Server":{"$path":"src/server"}},"SoundService":{"$properties":{"RespectFilteringEnabled":true}},"StarterPlayer":{"StarterPlayerScripts":{"Client":{"$path":"src/client"}}},"Workspace":{"$properties":{"FilteringEnabled":true},"Base1":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.25,0.25],"Material":"SmoothPlastic","Position":[-120,0.5,-120],"Size":[20,1,20]}},"Base2":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.3,0.5,1.0],"Material":"SmoothPlastic","Position":[120,0.5,-120],"Size":[20,1,20]}},"Base3":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.85,0.2],"Material":"SmoothPlastic","Position":[-120,0.5,120],"Size":[20,1,20]}},"Base4":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.3,0.85,0.3],"Material":"SmoothPlastic","Position":[120,0.5,120],"Size":[20,1,20]}},"Baseplate":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.35,0.75,0.35],"Locked":true,"Material":"Grass","Position":[0,-10,0],"Size":[400,20,400]}},"BobaCup":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.95,0.9,0.8],"Material":"SmoothPlastic","Position":[-60,7,-40],"Size":[8,14,8]}},"BobaLid":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.5,0.7],"Material":"SmoothPlastic","Position":[-60,14.5,-40],"Size":[9,1,9]}},"BobaStraw":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.5,0.7],"Material":"SmoothPlastic","Position":[-60,17,-40],"Size":[1,6,1]}},"Bush1":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.2,0.6,0.25],"Material":"SmoothPlastic","Position":[-65,1.5,100],"Shape":"Ball","Size":[4,3,4]}},"Bush2":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.2,0.6,0.25],"Material":"SmoothPlastic","Position":[65,1.5,110],"Shape":"Ball","Size":[4,3,4]}},"CerealBit1":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.85,0.3],"Material":"SmoothPlastic","Position":[58,5.5,-42],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"CerealBit2":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.6,0.2],"Material":"SmoothPlastic","Position":[62,5.5,-38],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"CerealBit3":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.85,0.3],"Material":"SmoothPlastic","Position":[61,5.5,-42],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"CerealBowl":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.3,0.5,0.9],"Material":"SmoothPlastic","Position":[60,2.5,-40],"Size":[10,5,10]}},"CookieChip1":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.3,0.2,0.15],"Material":"SmoothPlastic","Position":[-2,1.2,148],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"CookieChip2":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.3,0.2,0.15],"Material":"SmoothPlastic","Position":[2,1.2,152],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"Flower1":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.5,0.7],"Material":"SmoothPlastic","Position":[-55,0.8,65],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"Flower2":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.85,0.3],"Material":"SmoothPlastic","Position":[-30,0.8,85],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"Flower3":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,1.0,1.0],"Material":"SmoothPlastic","Position":[0,0.8,70],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"Flower4":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.6,0.2],"Material":"SmoothPlastic","Position":[25,0.8,100],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"Flower5":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.7,0.4,1.0],"Material":"SmoothPlastic","Position":[55,0.8,85],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"Flower6":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.5,0.7],"Material":"SmoothPlastic","Position":[-40,0.8,115],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"Flower7":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,0.85,0.3],"Material":"SmoothPlastic","Position":[5,0.8,130],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"Flower8":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,1.0,1.0],"Material":"SmoothPlastic","Position":[45,0.8,130],"Shape":"Ball","Size":[1.5,1.5,1.5]}},"FountainBase":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.8,0.8,0.8],"Material":"SmoothPlastic","Position":[0,1,0],"Size":[10,2,10]}},"FountainTop":{"$className":"Part","$properties":{"Anchored":true,"Color":[1.0,1.0,1.0],"Material":"SmoothPlastic","Position":[0,5,0],"Shape":"Ball","Size":[3,3,3]}},"FountainWater":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.3,0.6,1.0],"Material":"SmoothPlastic","Position":[0,3,0],"Shape":"Ball","Size":[8,3,8]}},"FusionKitchen":{"$className":"Model","Cauldron":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.1,0.4],"Material":"SmoothPlastic","Position":[0,2.5,-80],"Shape":"Ball","Size":[6,5,6]}},"CauldronBase":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.3,0.3,0.3],"Material":"SmoothPlastic","Position":[0,0.8,-80],"Size":[8,1.6,8]}},"KitchenBackWall":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.95,0.9,0.75],"Material":"SmoothPlastic","Position":[0,4,-88],"Size":[18,8,1]}},"KitchenFloor":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.7,0.7,0.7],"Material":"SmoothPlastic","Position":[0,0.5,-80],"Size":[18,1,18]}},"KitchenLeftWall":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.95,0.9,0.75],"Material":"SmoothPlastic","Position":[-8.5,4,-80],"Size":[1,8,16]}},"KitchenRightWall":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.95,0.9,0.75],"Material":"SmoothPlastic","Position":[8.5,4,-80],"Size":[1,8,16]}},"KitchenRoof":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.9,0.3,0.3],"Material":"SmoothPlastic","Position":[0,8.5,-80],"Size":[20,1,20]}}},"GiantCookie":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.85,0.65,0.4],"Material":"SmoothPlastic","Position":[0,0.5,150],"Size":[8,1,8]}},"PathEast":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.9,0.8,0.6],"Material":"SmoothPlastic","Position":[55,0.15,0],"Size":[50,0.3,8]}},"PathNorth":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.9,0.8,0.6],"Material":"SmoothPlastic","Position":[0,0.15,-55],"Size":[8,0.3,50]}},"PathSouth":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.9,0.8,0.6],"Material":"SmoothPlastic","Position":[0,0.15,55],"Size":[8,0.3,50]}},"PathWest":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.9,0.8,0.6],"Material":"SmoothPlastic","Position":[-55,0.15,0],"Size":[50,0.3,8]}},"Plaza":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.95,0.85,0.65],"Material":"SmoothPlastic","Position":[0,0.1,0],"Size":[60,0.2,60]}},"Pond":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.3,0.6,1.0],"Material":"SmoothPlastic","Position":[85,0.2,100],"Size":[24,0.4,16]}},"Spawn1":{"$className":"SpawnLocation","$properties":{"Anchored":true,"Color":[1.0,0.5,0.5],"Material":"SmoothPlastic","Neutral":true,"Position":[-120,1.5,-120],"Size":[6,1,6]}},"Spawn2":{"$className":"SpawnLocation","$properties":{"Anchored":true,"Color":[0.6,0.7,1.0],"Material":"SmoothPlastic","Neutral":true,"Position":[120,1.5,-120],"Size":[6,1,6]}},"Spawn3":{"$className":"SpawnLocation","$properties":{"Anchored":true,"Color":[1.0,0.9,0.5],"Material":"SmoothPlastic","Neutral":true,"Position":[-120,1.5,120],"Size":[6,1,6]}},"Spawn4":{"$className":"SpawnLocation","$properties":{"Anchored":true,"Color":[0.6,0.95,0.6],"Material":"SmoothPlastic","Neutral":true,"Position":[120,1.5,120],"Size":[6,1,6]}},"Tree1Leaves":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.7,0.3],"Material":"SmoothPlastic","Position":[-160,8,-40],"Shape":"Ball","Size":[7,7,7]}},"Tree1Trunk":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.5,0.35,0.2],"Material":"SmoothPlastic","Position":[-160,3,-40],"Size":[2,6,2]}},"Tree2Leaves":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.7,0.3],"Material":"SmoothPlastic","Position":[-160,8,40],"Shape":"Ball","Size":[7,7,7]}},"Tree2Trunk":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.5,0.35,0.2],"Material":"SmoothPlastic","Position":[-160,3,40],"Size":[2,6,2]}},"Tree3Leaves":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.7,0.3],"Material":"SmoothPlastic","Position":[160,8,-40],"Shape":"Ball","Size":[7,7,7]}},"Tree3Trunk":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.5,0.35,0.2],"Material":"SmoothPlastic","Position":[160,3,-40],"Size":[2,6,2]}},"Tree4Leaves":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.7,0.3],"Material":"SmoothPlastic","Position":[160,8,40],"Shape":"Ball","Size":[7,7,7]}},"Tree4Trunk":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.5,0.35,0.2],"Material":"SmoothPlastic","Position":[160,3,40],"Size":[2,6,2]}},"Tree5Leaves":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.7,0.3],"Material":"SmoothPlastic","Position":[-40,8,-160],"Shape":"Ball","Size":[7,7,7]}},"Tree5Trunk":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.5,0.35,0.2],"Material":"SmoothPlastic","Position":[-40,3,-160],"Size":[2,6,2]}},"Tree6Leaves":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.7,0.3],"Material":"SmoothPlastic","Position":[40,8,-160],"Shape":"Ball","Size":[7,7,7]}},"Tree6Trunk":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.5,0.35,0.2],"Material":"SmoothPlastic","Position":[40,3,-160],"Size":[2,6,2]}},"Tree7Leaves":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.7,0.3],"Material":"SmoothPlastic","Position":[-40,8,160],"Shape":"Ball","Size":[7,7,7]}},"Tree7Trunk":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.5,0.35,0.2],"Material":"SmoothPlastic","Position":[-40,3,160],"Size":[2,6,2]}},"Tree8Leaves":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.25,0.7,0.3],"Material":"SmoothPlastic","Position":[40,8,160],"Shape":"Ball","Size":[7,7,7]}},"Tree8Trunk":{"$className":"Part","$properties":{"Anchored":true,"Color":[0.5,0.35,0.2],"Material":"SmoothPlastic","Position":[40,3,160],"Size":[2,6,2]}}}}}
+{
+  "name": "snacktopia",
+  "tree": {
+    "$className": "DataModel",
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Ambient": [
+          0.7,
+          0.7,
+          0.7
+        ],
+        "Brightness": 3,
+        "ClockTime": 14,
+        "FogEnd": 1000,
+        "GlobalShadows": true,
+        "Outlines": false,
+        "Technology": "Future"
+      }
+    },
+    "Players": {
+      "$className": "Players",
+      "$properties": {
+        "CharacterAutoLoads": true
+      }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Server": {
+        "$path": "src/server"
+      }
+    },
+    "SoundService": {
+      "$className": "SoundService",
+      "$properties": {
+        "RespectFilteringEnabled": true
+      }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "Client": {
+          "$path": "src/client"
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "FilteringEnabled": true
+      },
+      "Base1": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.25,
+            0.25
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -120,
+            0.5,
+            -120
+          ],
+          "Size": [
+            20,
+            1,
+            20
+          ]
+        }
+      },
+      "Base2": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.3,
+            0.5,
+            1
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            120,
+            0.5,
+            -120
+          ],
+          "Size": [
+            20,
+            1,
+            20
+          ]
+        }
+      },
+      "Base3": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.85,
+            0.2
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -120,
+            0.5,
+            120
+          ],
+          "Size": [
+            20,
+            1,
+            20
+          ]
+        }
+      },
+      "Base4": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.3,
+            0.85,
+            0.3
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            120,
+            0.5,
+            120
+          ],
+          "Size": [
+            20,
+            1,
+            20
+          ]
+        }
+      },
+      "Baseplate": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.35,
+            0.75,
+            0.35
+          ],
+          "Locked": true,
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            -10,
+            0
+          ],
+          "Size": [
+            400,
+            20,
+            400
+          ]
+        }
+      },
+      "BobaCup": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.95,
+            0.9,
+            0.8
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -60,
+            7,
+            -40
+          ],
+          "Size": [
+            8,
+            14,
+            8
+          ]
+        }
+      },
+      "BobaLid": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.5,
+            0.7
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -60,
+            14.5,
+            -40
+          ],
+          "Size": [
+            9,
+            1,
+            9
+          ]
+        }
+      },
+      "BobaStraw": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.5,
+            0.7
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -60,
+            17,
+            -40
+          ],
+          "Size": [
+            1,
+            6,
+            1
+          ]
+        }
+      },
+      "Bush1": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.2,
+            0.6,
+            0.25
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -65,
+            1.5,
+            100
+          ],
+          "Shape": "Ball",
+          "Size": [
+            4,
+            3,
+            4
+          ]
+        }
+      },
+      "Bush2": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.2,
+            0.6,
+            0.25
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            65,
+            1.5,
+            110
+          ],
+          "Shape": "Ball",
+          "Size": [
+            4,
+            3,
+            4
+          ]
+        }
+      },
+      "CerealBit1": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.85,
+            0.3
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            58,
+            5.5,
+            -42
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "CerealBit2": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.6,
+            0.2
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            62,
+            5.5,
+            -38
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "CerealBit3": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.85,
+            0.3
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            61,
+            5.5,
+            -42
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "CerealBowl": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.3,
+            0.5,
+            0.9
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            60,
+            2.5,
+            -40
+          ],
+          "Size": [
+            10,
+            5,
+            10
+          ]
+        }
+      },
+      "CookieChip1": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.3,
+            0.2,
+            0.15
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -2,
+            1.2,
+            148
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "CookieChip2": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.3,
+            0.2,
+            0.15
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            2,
+            1.2,
+            152
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "Flower1": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.5,
+            0.7
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -55,
+            0.8,
+            65
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "Flower2": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.85,
+            0.3
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -30,
+            0.8,
+            85
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "Flower3": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            1,
+            1
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            0.8,
+            70
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "Flower4": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.6,
+            0.2
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            25,
+            0.8,
+            100
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "Flower5": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.7,
+            0.4,
+            1
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            55,
+            0.8,
+            85
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "Flower6": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.5,
+            0.7
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -40,
+            0.8,
+            115
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "Flower7": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.85,
+            0.3
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            5,
+            0.8,
+            130
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "Flower8": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            1,
+            1
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            45,
+            0.8,
+            130
+          ],
+          "Shape": "Ball",
+          "Size": [
+            1.5,
+            1.5,
+            1.5
+          ]
+        }
+      },
+      "FountainBase": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.8,
+            0.8,
+            0.8
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            1,
+            0
+          ],
+          "Size": [
+            10,
+            2,
+            10
+          ]
+        }
+      },
+      "FountainTop": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            1,
+            1
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            5,
+            0
+          ],
+          "Shape": "Ball",
+          "Size": [
+            3,
+            3,
+            3
+          ]
+        }
+      },
+      "FountainWater": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.3,
+            0.6,
+            1
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            3,
+            0
+          ],
+          "Shape": "Ball",
+          "Size": [
+            8,
+            3,
+            8
+          ]
+        }
+      },
+      "FusionKitchen": {
+        "$className": "Model",
+        "Cauldron": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.1,
+              0.4
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              0,
+              2.5,
+              -80
+            ],
+            "Shape": "Ball",
+            "Size": [
+              6,
+              5,
+              6
+            ]
+          }
+        },
+        "CauldronBase": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.3,
+              0.3,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              0,
+              0.8,
+              -80
+            ],
+            "Size": [
+              8,
+              1.6,
+              8
+            ]
+          }
+        },
+        "KitchenBackWall": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.95,
+              0.9,
+              0.75
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              0,
+              4,
+              -88
+            ],
+            "Size": [
+              18,
+              8,
+              1
+            ]
+          }
+        },
+        "KitchenFloor": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.7,
+              0.7,
+              0.7
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              0,
+              0.5,
+              -80
+            ],
+            "Size": [
+              18,
+              1,
+              18
+            ]
+          }
+        },
+        "KitchenLeftWall": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.95,
+              0.9,
+              0.75
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -8.5,
+              4,
+              -80
+            ],
+            "Size": [
+              1,
+              8,
+              16
+            ]
+          }
+        },
+        "KitchenRightWall": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.95,
+              0.9,
+              0.75
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              8.5,
+              4,
+              -80
+            ],
+            "Size": [
+              1,
+              8,
+              16
+            ]
+          }
+        },
+        "KitchenRoof": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.9,
+              0.3,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              0,
+              8.5,
+              -80
+            ],
+            "Size": [
+              20,
+              1,
+              20
+            ]
+          }
+        }
+      },
+      "GiantCookie": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.85,
+            0.65,
+            0.4
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            0.5,
+            150
+          ],
+          "Size": [
+            8,
+            1,
+            8
+          ]
+        }
+      },
+      "PathEast": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.9,
+            0.8,
+            0.6
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            55,
+            0.15,
+            0
+          ],
+          "Size": [
+            50,
+            0.3,
+            8
+          ]
+        }
+      },
+      "PathNorth": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.9,
+            0.8,
+            0.6
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            0.15,
+            -55
+          ],
+          "Size": [
+            8,
+            0.3,
+            50
+          ]
+        }
+      },
+      "PathSouth": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.9,
+            0.8,
+            0.6
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            0.15,
+            55
+          ],
+          "Size": [
+            8,
+            0.3,
+            50
+          ]
+        }
+      },
+      "PathWest": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.9,
+            0.8,
+            0.6
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            -55,
+            0.15,
+            0
+          ],
+          "Size": [
+            50,
+            0.3,
+            8
+          ]
+        }
+      },
+      "Plaza": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.95,
+            0.85,
+            0.65
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            0,
+            0.1,
+            0
+          ],
+          "Size": [
+            60,
+            0.2,
+            60
+          ]
+        }
+      },
+      "Pond": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.3,
+            0.6,
+            1
+          ],
+          "Material": "SmoothPlastic",
+          "Position": [
+            85,
+            0.2,
+            100
+          ],
+          "Size": [
+            24,
+            0.4,
+            16
+          ]
+        }
+      },
+      "Spawn1": {
+        "$className": "SpawnLocation",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.5,
+            0.5
+          ],
+          "Material": "SmoothPlastic",
+          "Neutral": true,
+          "Position": [
+            -120,
+            1.5,
+            -120
+          ],
+          "Size": [
+            6,
+            1,
+            6
+          ]
+        }
+      },
+      "Spawn2": {
+        "$className": "SpawnLocation",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.6,
+            0.7,
+            1
+          ],
+          "Material": "SmoothPlastic",
+          "Neutral": true,
+          "Position": [
+            120,
+            1.5,
+            -120
+          ],
+          "Size": [
+            6,
+            1,
+            6
+          ]
+        }
+      },
+      "Spawn3": {
+        "$className": "SpawnLocation",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            1,
+            0.9,
+            0.5
+          ],
+          "Material": "SmoothPlastic",
+          "Neutral": true,
+          "Position": [
+            -120,
+            1.5,
+            120
+          ],
+          "Size": [
+            6,
+            1,
+            6
+          ]
+        }
+      },
+      "Spawn4": {
+        "$className": "SpawnLocation",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.6,
+            0.95,
+            0.6
+          ],
+          "Material": "SmoothPlastic",
+          "Neutral": true,
+          "Position": [
+            120,
+            1.5,
+            120
+          ],
+          "Size": [
+            6,
+            1,
+            6
+          ]
+        }
+      },
+      "Tree1": {
+        "$className": "Model",
+        "Leaves": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.7,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -160,
+              8,
+              -40
+            ],
+            "Shape": "Ball",
+            "Size": [
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "Trunk": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -160,
+              3,
+              -40
+            ],
+            "Size": [
+              2,
+              6,
+              2
+            ]
+          }
+        }
+      },
+      "Tree2": {
+        "$className": "Model",
+        "Leaves": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.7,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -160,
+              8,
+              40
+            ],
+            "Shape": "Ball",
+            "Size": [
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "Trunk": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -160,
+              3,
+              40
+            ],
+            "Size": [
+              2,
+              6,
+              2
+            ]
+          }
+        }
+      },
+      "Tree3": {
+        "$className": "Model",
+        "Leaves": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.7,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              160,
+              8,
+              -40
+            ],
+            "Shape": "Ball",
+            "Size": [
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "Trunk": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              160,
+              3,
+              -40
+            ],
+            "Size": [
+              2,
+              6,
+              2
+            ]
+          }
+        }
+      },
+      "Tree4": {
+        "$className": "Model",
+        "Leaves": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.7,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              160,
+              8,
+              40
+            ],
+            "Shape": "Ball",
+            "Size": [
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "Trunk": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              160,
+              3,
+              40
+            ],
+            "Size": [
+              2,
+              6,
+              2
+            ]
+          }
+        }
+      },
+      "Tree5": {
+        "$className": "Model",
+        "Leaves": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.7,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -40,
+              8,
+              -160
+            ],
+            "Shape": "Ball",
+            "Size": [
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "Trunk": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -40,
+              3,
+              -160
+            ],
+            "Size": [
+              2,
+              6,
+              2
+            ]
+          }
+        }
+      },
+      "Tree6": {
+        "$className": "Model",
+        "Leaves": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.7,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              40,
+              8,
+              -160
+            ],
+            "Shape": "Ball",
+            "Size": [
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "Trunk": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              40,
+              3,
+              -160
+            ],
+            "Size": [
+              2,
+              6,
+              2
+            ]
+          }
+        }
+      },
+      "Tree7": {
+        "$className": "Model",
+        "Leaves": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.7,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -40,
+              8,
+              160
+            ],
+            "Shape": "Ball",
+            "Size": [
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "Trunk": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              -40,
+              3,
+              160
+            ],
+            "Size": [
+              2,
+              6,
+              2
+            ]
+          }
+        }
+      },
+      "Tree8": {
+        "$className": "Model",
+        "Leaves": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.25,
+              0.7,
+              0.3
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              40,
+              8,
+              160
+            ],
+            "Shape": "Ball",
+            "Size": [
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "Trunk": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "Material": "SmoothPlastic",
+            "Position": [
+              40,
+              3,
+              160
+            ],
+            "Size": [
+              2,
+              6,
+              2
+            ]
+          }
+        }
+      }
+    }
+  }
+}
